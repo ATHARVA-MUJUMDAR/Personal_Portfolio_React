@@ -1,3 +1,4 @@
 {
-  "parser": "@typescript-eslint/parser"
+  "parser": "@typescript-eslint/parser" ,
+  "extends": ["@babel/plugin-transform-private-property-in-object", "next/core-web-vitals"]
 }
