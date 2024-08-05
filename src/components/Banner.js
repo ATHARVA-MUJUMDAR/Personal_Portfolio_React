@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { Container, Row, Col } from "react-bootstrap";
 import headerImg from "../assets/img/header-img.svg";
 import { ArrowRightCircle } from "react-bootstrap-icons";
@@ -6,49 +6,66 @@ import "animate.css";
 import TrackVisibility from "react-on-screen";
 
 function Banner() {
-  const [loopNum, setLoopNum] = useState(0);
-  const [isDeleting, setIsDeleting] = useState(false);
-  const [text, setText] = useState("");
-  const [delta, setDelta] = useState(300 - Math.random() * 100);
-  const [index, setIndex] = useState(1);
-  const toRotate = ["Web Developer", "Programmer", "UI/UX Designer"];
-  const period = 5000;
+const TextRotator = ({ texts, period = 5000 }) => {
+    const [textIndex, setTextIndex] = useState(0);
+    const [displayedText, setDisplayedText] = useState("");
+    const [isDeleting, setIsDeleting] = useState(false);
+    const typingRef = useRef(null);
 
-  useEffect(() => {
-    let ticker = setInterval(() => {
-      tick();
-    }, delta);
+    useEffect(() => {
+      const currentText = texts[textIndex];
+      let typingSpeed = 500000; // Speed of typing effect
+      let deletingSpeed = 1000; // Speed of deleting effect
 
-    return () => {
-      clearInterval(ticker);
-    };
-  }, [text]);
+      if (isDeleting) {
+        typingSpeed = deletingSpeed;
+      } else {
+        typingSpeed = 100;
+      }
 
-  const tick = () => {
-    let i = loopNum % toRotate.length;
-    let fullText = toRotate[i];
-    let updatedText = isDeleting
-      ? fullText.substring(0, text.length - 1)
-      : fullText.substring(0, text.length + 1);
+      typingRef.current = setInterval(() => {
+        if (isDeleting) {
+          setDisplayedText((prev) => prev.slice(0, -1));
+          if (displayedText.length === 0) {
+            clearInterval(typingRef.current);
+            setIsDeleting(false);
+            setTextIndex((prevIndex) => (prevIndex + 1) % texts.length);
+            setTimeout(() => {
+              // Wait before starting to type the next text
+              typingRef.current = setInterval(() => {
+                setDisplayedText((prev) =>
+                  texts[textIndex].slice(0, prev.length + 1)
+                );
+                if (displayedText.length === texts[textIndex].length) {
+                  clearInterval(typingRef.current);
+                  setIsDeleting(true);
+                  setTimeout(() => {
+                    // Wait before starting to delete
+                  }, period / 2);
+                }
+              }, typingSpeed);
+            }, period / 2); // Time to wait before deleting starts
+          }
+        } else {
+          setDisplayedText((prev) =>
+            texts[textIndex].slice(0, prev.length + 1)
+          );
+          if (displayedText.length === texts[textIndex].length) {
+            clearInterval(typingRef.current);
+            setIsDeleting(true);
+            setTimeout(() => {
+              // Wait before starting to delete
+            }, period / 2);
+          }
+        }
+      }, typingSpeed);
 
-    setText(updatedText);
+      return () => {
+        clearInterval(typingRef.current);
+      };
+    }, [displayedText, isDeleting, textIndex, texts, period]);
 
-    if (isDeleting) {
-      setDelta((prevDelta) => prevDelta / 2);
-    }
-
-    if (!isDeleting && updatedText === fullText) {
-      setIsDeleting(true);
-      setIndex((prevIndex) => prevIndex - 1);
-      setDelta(period);
-    } else if (isDeleting && updatedText === "") {
-      setIsDeleting(false);
-      setLoopNum(loopNum + 1);
-      setIndex(1);
-      setDelta(500);
-    } else {
-      setIndex((prevIndex) => prevIndex + 1);
-    }
+    return <span className="txt-rotate">{displayedText}</span>;
   };
 
   return (
@@ -66,13 +83,10 @@ function Banner() {
                   <span className="tagline">Welcome to my Portfolio</span>
                   <h1>
                     {`Hi! I'm Atharva `}
-                    <span
-                      className="txt-rotate"
-                      dataPeriod="5000"
-                      data-rotate='[ "Web Developer", "Programmer", "UI/UX Designer" ]'
-                    >
-                      <span className="wrap">{text}</span>
-                    </span>
+                    <TextRotator
+                      period={5000}
+                      texts={["Web Developer", "Programmer", "UI/UX Designer"]}
+                    />
                   </h1>
                   <p>
                     I am Atharva Mukul Mujumdar. I am a passionate programmer
