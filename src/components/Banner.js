@@ -82,7 +82,7 @@ const TextRotator = ({ texts, period = 5000 }) => {
                 >
                   <span className="tagline">Welcome to my Portfolio</span>
                   <h1>
-                    {`Hi! I'm Atharva `}
+                    {`Hi! I'm Atharva, a `}
                     <TextRotator
                       period={5000}
                       texts={["Web Developer", "Programmer", "UI/UX Designer"]}

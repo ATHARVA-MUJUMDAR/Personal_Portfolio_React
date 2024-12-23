@@ -1,4 +1,15 @@
 {
-  "parser": "@typescript-eslint/parser" ,
-  "extends": ["@babel/plugin-transform-private-property-in-object", "next/core-web-vitals"]
+  "parser": "@babel/eslint-parser",
+  "extends": [
+    "eslint:recommended",
+    "plugin:react/recommended"
+  ],
+  "parserOptions": {
+    "requireConfigFile": false
+  },
+  "plugins": ["react"],
+  "rules": {
+    "react/react-in-jsx-scope": "off"
+  }
 }
+
