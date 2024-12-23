@@ -5,8 +5,10 @@
   "keywords": [],
   "main": "src/index.tsx",
   "dependencies": {
+    "@babel/eslint-parser": "^7.25.9",
     "animate.css": "4.1.1",
     "bootstrap": "5.3.3",
+    "eslint-plugin-react": "^7.37.2",
     "react": "^19.0.0",
     "react-alice-carousel": "2.9.1",
     "react-bootstrap": "2.10.7",

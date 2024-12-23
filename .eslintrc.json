@@ -7,9 +7,13 @@
   "parserOptions": {
     "requireConfigFile": false
   },
-  "plugins": ["react"],
+  "plugins": [
+    "react",
+    "@babel"
+  ],
   "rules": {
     "react/react-in-jsx-scope": "off"
   }
 }
+
 
