@@ -4,6 +4,6 @@ module.exports = {
     "@babel/preset-react"
   ],
   plugins: [
-    ["@babel/plugin-transform-private-property-in-object", { "loose": false }, { runtime: "automatic" }]
+    ["@babel/plugin-transform-private-property-in-object", { runtime: "automatic" }]
   ]
 };
